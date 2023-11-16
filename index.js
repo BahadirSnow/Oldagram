@@ -6,7 +6,7 @@ const posts = [
         avatar: "images/avatar-vangogh.jpg",
         post: "images/post-vangogh.jpg",
         comment: "just took a few mushrooms lol",
-        likes: 21
+        likes: 21 
     },
     {
         name: "Gustave Courbet",
@@ -28,28 +28,28 @@ const posts = [
     }
 ]
 
-let likeBtnEl = document.getElementById("like-btn")
-let postImageEl = document.getElementById("post-img")
-let likeNumberEl = document.getElementById("likes")
-let posterInfoEl = document.getElementById("user-info")
-let posterDetailEl = document.getElementById("poster-info")
-let posterUserNameEl = document.getElementById("user-full-name")
-let posterLocationEl = document.getElementById("location-text")
-let usernameEl = document.getElementById("username")
-let userCommentEl = document.getElementById("user-comment")
-let container = document.getElementById("container")
+// let likeBtnEl = document.getElementById("like-btn")
+// let postImageEl = document.getElementById("post-img")
+// let likeNumberEl = document.getElementById("likes")
+// let posterInfoEl = document.getElementById("user-info")
+// let posterDetailEl = document.getElementById("poster-info")
+// let posterUserNameEl = document.getElementById("user-full-name")
+// let posterLocationEl = document.getElementById("location-text")
+// let usernameEl = document.getElementById("username")
+// let userCommentEl = document.getElementById("user-comment")
+// let container = document.getElementById("container")
 
 
 function render (posts){
     
-    let baseHtml = `
+    container.innerHTML += `
     <div class="header">
         <img id="logo" src="images/logo.png">
         <img id="user-avatar" src="images/user-avatar.png" alt="Profile picture">
     </div>`
     for(let i = 0; i < posts.length; i++){
         let currentPost = posts[i]
-        baseHtml += `
+        container.insertAdjacentHTML("beforeend", `
         <div class="post" id="post">
             <div id="user-info">
                 <img class="post-avatar" src=${currentPost.avatar} alt="Profile picture of poster">
@@ -63,30 +63,49 @@ function render (posts){
             </div>
             <div class="post-body">
                 <div id="icons">
-                    <img id="like-btn" class="icon-button" alt="Like button" src="images/icon-heart.png">
+                    <img id="like-btn-${i}" class="icon-button" alt="Like button" src="images/icon-heart.png">
                     <img class="icon-button" alt="Comment button" src="images/icon-comment.png">
                     <img class="icon-button" alt="Share button" src="images/icon-dm.png">
                 </div>
-                <span class="likes-bar"><span id="likes">${currentPost.likes}</span> likes</span>
+                <span class="likes-bar"><span id="likes-${i}">${currentPost.likes}</span> likes</span>
                 <span class="comment"><span id="username">${currentPost.username}</span><span id="user-comment">${currentPost.comment}</span>
             </div>
-        </div>`
+        </div>`)
+        
+        var likeBtnEl = document.getElementById(`like-btn-${i}`)
+
+        likeBtnEl.onclick = function(){
+            var likeBtnEl = document.getElementById(`like-btn-${i}`)
+            var likeNumberEl = document.getElementById(`likes-${i}`)
+            console.log(likeBtnEl.src)
+            var imageArray = likeBtnEl.src.split("/")
+
+            if(imageArray[imageArray.length -1] === "icon-heart-red.png"){
+                currentPost.likes -= 1
+                likeNumberEl.textContent = currentPost.likes 
+                likeBtnEl.src = "images/icon-heart.png"
+            }else{
+                currentPost.likes += 1
+                likeNumberEl.textContent = currentPost.likes
+                likeBtnEl.src = "images/icon-heart-red.png"
+            }
+        }
+
     }
-    container.innerHTML = baseHtml
+    
 }
 
 render(posts)
 
-let number = Number(likeNumberEl.textContent)
-likeBtnEl.addEventListener("click", function(){
-    number += 1
-    likeNumberEl.textContent = number
+// let number = Number(likeNumberEl.textContent)
+// likeBtnEl.addEventListener("click", function(){
+//     number += 1
+//     likeNumberEl.textContent = number
     
-})
+// })
 
-postImageEl.addEventListener("dblclick", function(){
-    number += 1
-    likeNumberEl.textContent = number
-})
-
+// postImageEl.addEventListener("dblclick", function(){
+//     number += 1
+//     likeNumberEl.textContent = number
+// })
 
